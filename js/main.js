@@ -170,6 +170,7 @@ d3.csv("data/clean_open_data.csv")
       compositeChart
         .width(900)
         .height(400)
+        .useViewBoxResizing(true)
         .margins({top: 30, right: 10, bottom: 30, left: 40})
         .dimension(dateDim)
         .title(d => { return [
@@ -207,6 +208,7 @@ d3.csv("data/clean_open_data.csv")
       rowChart
         .width(900)
         .height(400)
+        .useViewBoxResizing(true)
         .margins({top: 30, right: 10, bottom: 30, left: 210})
         .dimension(specDim)
         .ordering(d => -d.value.avlos)

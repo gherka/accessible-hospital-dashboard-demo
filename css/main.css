@@ -1,5 +1,9 @@
 /* GlOBAL TAGS */
 
+html {
+  box-sizing: border-box;
+}
+
 main {
     max-width: 1000px;
     min-width: 460px;
@@ -11,22 +15,27 @@ h1 {
     margin-left: 0;
     margin-right: auto;
     min-width: 300px;
-    font-size: 32px;
+    font-size: 30px;
 }
 
-/* Won't display in Chrome / Edge otherwise! */
+/* Remeber that viewBox is set to fix aspect ratio */
+
+.chart-wrapper {
+    width: 100%;
+    height: auto;
+}
+
 svg {
-  height: auto;
-  width: auto;
+    width: 100%;
+    height: 100%;
 }
 
 /* Overwrite global focus for better accessibility */
 :focus {
-  outline-width: 2px;
-  outline-style: solid;
-  outline-color: yellow;
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: yellow;
 }
-
 
 /* CONTAINERS AND WRAPPERS */
 .container {
@@ -38,57 +47,58 @@ svg {
     flex-wrap: nowrap;
 }
     
-    .header {
-      min-width: 1000px;
-    }
-    
-    .horizontal{
+  .wrap {
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+  }
+  
+  .horizontal{
+    flex-direction: row;
+  }
+   
+.dates-group {
+    margin-left: 0;
+    margin-right: auto;
+    width: 450px;
+}
 
-        flex-direction: row;
-    }
+.locations-group {
+    margin-left: 0;
+    margin-right: auto;
+    padding-bottom: 10px;
+    width: 450px;
+}
 
-    .summary-numbers {
-        min-width: 350px;
-        margin: auto;
-
-    }
-    
-    .dropdowns {
-
-        justify-content: flex-start;
-        height: 100px;
-
-    }
+.summary-numbers {
+    width: 350px;
+    margin: auto;
+}
 
 .summary-numbers label {
+    padding-bottom: 10px;
     font-size: 20px;
 }
 
-.chart-wrapper {
-  
-  margin-left: auto;
-  margin-right: auto;  
-  
+.summary-numbers span {
+    font-size: 20px;
 }
-
+    
+/* INDIVIDUAL DROPDOWNS: LOCATIONS, DATES, ETC. */
 .dropdown-wrapper {
     display: flex;
     flex-direction: column;
-    
+    align-items: start;    
 }   
-    .dates {
-        margin-bottom: 0;
-        margin-top: auto;
-    }
 
-    label {
-        margin: 5px;
-    }
-    select {
-        width: 220px;
-        margin: 5px;
-    }
+.dropdown-wrapper select {
+    width: 220px;
+    margin: 5px;
+}
 
+.dropdown-wrapper label {
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
 
 /* CHART CSS */
 #line-chart .bubble {
@@ -103,7 +113,6 @@ svg {
 #row-chart g.row text {
     fill: black;
 }
-
 
 /* TABLE CSS */
 .table-wrapper {
