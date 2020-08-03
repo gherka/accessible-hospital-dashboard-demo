@@ -1,0 +1,3 @@
+/data/*
+!/data/clean_open_data.csv
+notes.txt

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible hospital dashboard demo</title>
+    <link type="text/css" rel="stylesheet" href="/css/main.css">
+    <link type="text/css" rel="stylesheet" href="/css/dc.css">
+</head>
+<body>
+<main>
+    <div class="container horizontal header">
+        <h1>Hospital activity dashboard</h1>
+        <div class="dropdown-wrapper dates">
+            <label for="date-from">Date from</label>
+            <select name="dateFrom" id="date-from" aria-controls="summary-episodes-span"></select>
+        </div>
+        <div class="dropdown-wrapper dates">
+            <label for="date-to">Date to</label>
+            <select name="dateTo" id="date-to"></select>
+        </div>
+    </div>
+    <div class="container horizontal dropdowns">
+        <!-- Need label ID for DC dropdowns -->
+        <div class="dropdown-wrapper">
+            <label id="board-dropdown-label">Health Board</label>
+            <div id="board-dropdown" class="dropdown"></div>
+        </div>
+        <div class="dropdown-wrapper">
+            <label id="hospital-dropdown-label">Hospital</label>
+            <div id="hospital-dropdown" class="dropdown"></div>
+        </div>
+        <div class="container horizontal summary-numbers">
+            <div class=container>
+                <label>Episodes</label>
+                <div id="summary-episodes" class="summary-number" tabindex=0 role="main" aria-label="Total number of episodes"></div>
+            </div>
+            <div class=container>
+                <label>Bed Days</label>
+                <div id="summary-bed-days" class="summary-number" tabindex=0 role="main" aria-label="Total number of bed days"></div>
+            </div>
+            <div class=container>
+                <label>Avlos</label>
+                <div id="summary-avlos" class="summary-number" tabindex=0 role="main" aria-label="Average length of stay"></div>
+            </div>        
+        </div>
+    </div>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam quis pharetra justo, vel tincidunt odio. Suspendisse scelerisque ligula eget semper cursus. Aliquam egestas lorem a eros ornare varius.
+    </p>
+    <div class="container">
+        <div id="line-chart" class="chart-wrapper"></div>
+        <div id="row-chart" class="chart-wrapper"></div>
+        <div class="container vertical">
+            <h2>Table that reflects chart selections</h2>
+            <div class="table-wrapper" tabindex=0>
+                <div id="viz-table" class="table table-hover"></div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <p>Source: <a aria-label="Dashboard data source is Scottish Health and Social Care Open Data" href="https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity">Scottish Health and Social Care Open Data</a></p>
+</main>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.2/crossfilter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+<script src="/js/dc.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
