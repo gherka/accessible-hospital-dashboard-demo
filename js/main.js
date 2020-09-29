@@ -138,7 +138,9 @@ d3.csv("data/clean_open_data.csv")
 
       summaryEpisodes
         .group(summaryEpisodesGroup)
-        .valueAccessor(d => d); // quirk of using groupAll()
+        .valueAccessor(d => d)
+        .ariaLiveRegion(true)
+        .keyboardAccessible(true); // quirk of using groupAll()
 
       // BED DAYS
       const summaryBedDays = new dc.NumberDisplay("#summary-bed-days");
@@ -146,7 +148,9 @@ d3.csv("data/clean_open_data.csv")
 
       summaryBedDays
         .group(summaryBedDaysGroup)
-        .valueAccessor(d => d);
+        .valueAccessor(d => d)
+        .ariaLiveRegion(true)
+        .keyboardAccessible(true);
 
       // AVERAGE LENGTH OF STAY
       const summaryAvlos = new dc.NumberDisplay("#summary-avlos");
@@ -155,7 +159,9 @@ d3.csv("data/clean_open_data.csv")
       summaryAvlos
         .group(summaryAvlosGroup)
         .formatNumber(d3.format(".2"))
-        .valueAccessor(d => d.avlos);
+        .valueAccessor(d => d.avlos)
+        .ariaLiveRegion(true)
+        .keyboardAccessible(true);
 
       // ======
       // CHARTS
@@ -170,6 +176,7 @@ d3.csv("data/clean_open_data.csv")
       compositeChart
         .width(900)
         .height(400)
+        .svgDescription("Line chart")
         .useViewBoxResizing(true)
         .margins({top: 30, right: 10, bottom: 30, left: 40})
         .dimension(dateDim)
@@ -186,6 +193,7 @@ d3.csv("data/clean_open_data.csv")
           dc.bubbleChart(compositeChart)
             .group(nonEmptyLineTotal)
             .valueAccessor(getValue)
+            .keyboardAccessible(true)
             .radiusValueAccessor(p => 1)
             .r(d3.scaleLinear().domain([1,1]))
             .maxBubbleRelativeSize(0.001) //hacky
@@ -216,6 +224,7 @@ d3.csv("data/clean_open_data.csv")
         .group(nonEmptyRowTotal)
         .labelOffsetX(-210)
         .valueAccessor(getValue)
+        .keyboardAccessible(true)
         .title(d => { return [
           `Specialty: ${d.key}`,
           `Numerator: ${d.value.numerator}`,
@@ -256,7 +265,7 @@ d3.csv("data/clean_open_data.csv")
           }]);
         
 
-      // ACCESSIBILITY HACKS AFTER RENDERING
+      // ACCESSIBILITY HACKS AFTER RENDERING - old way!
       // adding elements like <title> to svg doesn't work on renderlet - has to be postRender
 
       // Tooltips via <title> are only read by Narrator and only in Firefox
@@ -267,96 +276,96 @@ d3.csv("data/clean_open_data.csv")
       // Triggers on every change, not just based on aria-controls
       // NVDA space and enter don't work on SVG element controls - tabbing works, but clicking doesn't.
 
-      summaryEpisodes.on("postRender", () => {
+      // summaryEpisodes.on("postRender", () => {
         
-        d3.select("#summary-episodes .number-display")
-          .attr("id", "summary-episodes-span")
-          .attr("aria-label", "Change to total number of episodes")
-          .attr("aria-live", "polite");
+      //   d3.select("#summary-episodes .number-display")
+      //     .attr("id", "summary-episodes-span")
+      //     .attr("aria-label", "Change to total number of episodes")
+      //     .attr("aria-live", "polite");
           
-      });
+      // });
       
-      // SelectMenu need to be labelled
-      boardDropdown.on("postRender", () => {
+      // // SelectMenu need to be labelled
+      // boardDropdown.on("postRender", () => {
         
-        d3.select("#board-dropdown .dc-select-menu")
-        .attr("aria-labelledby", "board-dropdown-label");
+      //   d3.select("#board-dropdown .dc-select-menu")
+      //   .attr("aria-labelledby", "board-dropdown-label");
   
-      });
+      // });
 
-      hospDropdown.on("postRender", () => {
+      // hospDropdown.on("postRender", () => {
         
-        d3.select("#hospital-dropdown .dc-select-menu")
-        .attr("aria-labelledby", "hospital-dropdown-label");
+      //   d3.select("#hospital-dropdown .dc-select-menu")
+      //   .attr("aria-labelledby", "hospital-dropdown-label");
   
-      });
+      // });
 
 
-      // LINE CHART
-      compositeChart.on("postRender", () => {
+      // // LINE CHART
+      // compositeChart.on("postRender", () => {
                
-        // make sure the svg as a whole has a tabindex
-        const chartSVG = d3.select("#line-chart svg");
-        chartSVG
-          .attr("tabindex", 0)
-          .attr("aria-labelledby", "line-chart-svg-title");
+      //   // make sure the svg as a whole has a tabindex
+      //   const chartSVG = d3.select("#line-chart svg");
+      //   chartSVG
+      //     .attr("tabindex", 0)
+      //     .attr("aria-labelledby", "line-chart-svg-title");
 
-        // and a title to be read aloud on tab navigation
-        const chartTitle = document.createElement("title");
+      //   // and a title to be read aloud on tab navigation
+      //   const chartTitle = document.createElement("title");
 
-        chartTitle
-          .setAttribute("id", "line-chart-svg-title");
-        chartTitle.innerHTML = "Time series of average length of stay";
+      //   chartTitle
+      //     .setAttribute("id", "line-chart-svg-title");
+      //   chartTitle.innerHTML = "Time series of average length of stay";
 
-        chartSVG.node().insertBefore(chartTitle, chartSVG.node().firstChild);
+      //   chartSVG.node().insertBefore(chartTitle, chartSVG.node().firstChild);
         
-        // inner elements must also be accessbile from keyboard
-        const circles = d3.selectAll("#line-chart .chart-body .bubble");
-        circles
-          .attr("tabindex", 0);
+      //   // inner elements must also be accessbile from keyboard
+      //   const circles = d3.selectAll("#line-chart .chart-body .bubble");
+      //   circles
+      //     .attr("tabindex", 0);
         
-      });
+      // });
 
-      // If you're doing enter() exit() filtering, need to re-apply tabindex!
-      compositeChart.on("postRedraw", () => {
-        // inner elements must also be accessbile from keyboard
-        const circles = d3.selectAll("#line-chart .chart-body .bubble");
-        circles
-          .attr("tabindex", 0);
-      });
+      // // If you're doing enter() exit() filtering, need to re-apply tabindex!
+      // compositeChart.on("postRedraw", () => {
+      //   // inner elements must also be accessbile from keyboard
+      //   const circles = d3.selectAll("#line-chart .chart-body .bubble");
+      //   circles
+      //     .attr("tabindex", 0);
+      // });
 
       //ROW CHART
-      rowChart.on("postRender", () => {
+      // rowChart.on("postRender", () => {
                
-        // make sure the svg as a whole has a tabindex
-        const chartSVG = d3.select("#row-chart svg");
-        chartSVG
-          .attr("tabindex", 0)
-          .attr("aria-labelledby", "row-chart-svg-title");
+      //   // make sure the svg as a whole has a tabindex
+      //   const chartSVG = d3.select("#row-chart svg");
+      //   chartSVG
+      //     .attr("tabindex", 0)
+      //     .attr("aria-labelledby", "row-chart-svg-title");
 
-        // and a title to be read aloud on tab navigation
-        const chartTitle = document.createElement("title");
+      //   // and a title to be read aloud on tab navigation
+      //   const chartTitle = document.createElement("title");
 
-        chartTitle
-          .setAttribute("id", "row-chart-svg-title");
-        chartTitle.innerHTML = "Horizintal bar chart showing specialties sorted by average length of stay";
+      //   chartTitle
+      //     .setAttribute("id", "row-chart-svg-title");
+      //   chartTitle.innerHTML = "Horizintal bar chart showing specialties sorted by average length of stay";
 
-        chartSVG.node().insertBefore(chartTitle, chartSVG.node().firstChild);
+      //   chartSVG.node().insertBefore(chartTitle, chartSVG.node().firstChild);
         
-        // inner elements must also be accessbile from keyboard
-        const bars = d3.selectAll("#row-chart rect");
-        bars
-          .attr("tabindex", 0);
+      //   // inner elements must also be accessbile from keyboard
+      //   const bars = d3.selectAll("#row-chart rect");
+      //   bars
+      //     .attr("tabindex", 0);
         
-      });
+      // });
 
-      // If you're doing enter() exit() filtering, need to re-apply tabindex!
-      rowChart.on("postRedraw", () => {
-        // inner elements must also be accessbile from keyboard
-        const bars = d3.selectAll("#row-chart rect");
-        bars
-          .attr("tabindex", 0);
-      });
+      // // If you're doing enter() exit() filtering, need to re-apply tabindex!
+      // rowChart.on("postRedraw", () => {
+      //   // inner elements must also be accessbile from keyboard
+      //   const bars = d3.selectAll("#row-chart rect");
+      //   bars
+      //     .attr("tabindex", 0);
+      // });
 
 
       dc.renderAll();
